@@ -57,14 +57,19 @@ public class hotelsLocation  {
         lp.clickSearch();
         lp.waitForMe();
     }
-    @When("^i sort the result by \"Price (.+)\"$")
+    @When("^i sort the result by \"Price Low to high\"$")
     public void selectPrice(){
-        lp.mouseOver();
+        lp.PriceOver();
         lp.selectPriceLowHigh();
     }
     @And("^i print the (.+) price and hotel name in the console$")
     public void printPrice(){
+        lp.waitASec();
         lp.checkLowP();
+    }
+    @And("^i verify the lowest price id less than (.+)$")
+    public void chechPrice(String name){
+        lp.checkEquals(name);
     }
 
 

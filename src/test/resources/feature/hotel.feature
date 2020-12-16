@@ -1,4 +1,4 @@
-Feature: hotel
+Feature: hotel.com
   Background:
     Given remove add popup
 
@@ -19,5 +19,5 @@ Feature: hotel
       Then i click search to find
       When i sort the result by "Price Low to high"
       And i print the lowest price and hotel name in the console
-      Then i verify the lowest price id less than $100
+      Then i verify the lowest price id less than 100
 

@@ -3,9 +3,11 @@ package Pages.Hotels;
 import Pages.BasePage;
 import WebDriver.Web;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
 
 import javax.swing.*;
 import java.util.List;
@@ -15,6 +17,7 @@ public class LandingPageMethods extends BasePage {
 
     // Locators
     By enterInSearch = By.xpath("//input[@id='qf-0q-destination']");
+    By nextPageSearchBar = By.id("q-destination");
     By searchButton = By.xpath("//button[@type='submit']");
     By checkInCalendar = By.id("qf-0q-localised-check-in");
     By checkOutCalendar = By.id("qf-0q-localised-check-out");
@@ -28,8 +31,9 @@ public class LandingPageMethods extends BasePage {
     By childrens = By.id("qf-0q-room-0-children");
     By Child1 = By.id("qf-0q-room-0-child-0-age");
     By Child2 = By.id("qf-0q-room-0-child-1-age");
-    By selPriceLowToHigh = By.id("//ul[@id='sort-submenu-price']//li[2]");
-    By mouseoverPrice = By.id("//a[@data-menu='sort-submenu-price']");
+    By selPriceLowToHigh = By.xpath("//div[@class='submenu-wrap']//li[2]//a[contains(text(),'Price (low to high)')]");
+    By mouseoverPrice = By.xpath("//li[@class='sort-option']//a[contains(text(),'Price')]");
+    By getTextPrice = By.xpath("//ol[@class='listings infinite-scroll-enabled']//li[1]//aside[1]//div[@class='price']//ins[1]");
 
 
 
@@ -65,7 +69,7 @@ public class LandingPageMethods extends BasePage {
         return Web.getDriver().findElement(destinationTitle).equals("Lake George, New York, United States of America");
     }
     public boolean verify2(){
-        return Web.getDriver().findElement(enterInSearch).equals("Lake George, New York, United States of America");
+        return Web.getDriver().findElement(nextPageSearchBar).equals("Lake George, New York, United States of America");
     }
     public void closeFormAdd(){
         boolean checkIf = Web.getDriver().findElement(isShown).isEnabled();
@@ -81,19 +85,23 @@ public class LandingPageMethods extends BasePage {
     }public void sendAgeCH2(String name){
         selectDropDown(Child2,name);
     }
+    public void PriceOver(){
+        JavascriptExecutor js = (JavascriptExecutor)Web.getDriver();
+        js.executeScript("scrollBy(0,200)");
+       WebElement select = Web.getDriver().findElement(mouseoverPrice);
+       select.click();
+    }
     public void selectPriceLowHigh(){
         WebElement select = Web.getDriver().findElement(selPriceLowToHigh);
-        Actions etc = new Actions(Web.getDriver());
-        etc.moveToElement(select).build().perform();
+        select.click();
     }
     public void checkLowP(){
-        String bb = Web.getDriver().findElement(selPriceLowToHigh).getText();
-        System.out.println(bb);
+        String bb = Web.getDriver().findElement(getTextPrice).getText();
+        System.out.println("The lowest price for hotels is $"+bb);
     }
-    public void mouseOver(){
-       WebElement select = Web.getDriver().findElement(mouseoverPrice);
-       Actions etc = new Actions(Web.getDriver());
-       etc.moveToElement(select).build().perform();
+    public void checkEquals(String name){
+        String bb = Web.getDriver().findElement(getTextPrice).getText();
+        Assert.assertEquals(name, bb, "Price is not the same as input");
     }
 
 }
